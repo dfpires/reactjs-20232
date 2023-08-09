@@ -9,7 +9,7 @@ interface ProdutoProps {
 export function Produto(prod: ProdutoProps) {
 
     return (
-        <div>
+        <div className="bg-zinc-900 w-full h-10 text-white rounded m-2 flex items-center justify-center">
             Nome: {prod.nome}
             Descrição: {prod.descricao}
             Qtde: {prod.qtde}
