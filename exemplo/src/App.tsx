@@ -1,26 +1,16 @@
+import Login from './components/Login'
+import { ProdutoP } from './components/ProdutoP'
 import './styles/global.css'
-import { Produto } from './components/Produto'
-
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 // componente funcional
 function App() {
-  
   return (
-    <>
-      <h1> Wello World ReactJS </h1>
-      <Produto 
-        nome={"Notebook"} 
-        descricao={"Notebook Dell"} 
-        qtde={10} 
-        preco={5000.00}/>
-      <Produto
-       nome={"Celular"} 
-       descricao={"Samsung S21"} 
-       qtde={10} 
-       preco={5000.00}
-      /> 
-    </>
-    
+    <Router>
+      <Routes>
+         <Route path="/" element={<Login />} />
+         <Route path="/produto" element={<ProdutoP />} />
+      </Routes>
+    </Router>
   )
 }
-
 export default App
