@@ -1,8 +1,14 @@
 import { Produto } from "./Produto";
+import {useLocation} from 'react-router-dom';
+
 export function ProdutoP() {
+  // esta variável vai conter o username passado na navegação
+  const location = useLocation();
+  // recupera o username
+  const username = location.state?.username || '';
     return (
         <>
-        <h1> Wello World ReactJS </h1>
+        <h1> Bem-Vindo {username} </h1>
         <Produto 
           nome={"Notebook"} 
           descricao={"Notebook Dell"} 
