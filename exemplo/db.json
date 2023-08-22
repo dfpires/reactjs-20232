@@ -2,5 +2,10 @@
       { "id": 1, "username": "admin", "password": "123" },
       { "id": 2, "username": "user", "password": "123" },
       { "id": 3, "username": "dfpires", "password": "123" }
+    ],
+    "products": [
+      { "id": 1, "name": "Product 1", "description": "Product 1 Detail ", "price": 100, "qty": 10 },
+      { "id": 2, "name": "Product 2", "description": "Product 2 Detail ", "price": 200, "qty": 20 },
+      { "id": 3, "name": "Product 3", "description": "Product 3 Detail ", "price": 300, "qty": 30 }
     ]
 }
