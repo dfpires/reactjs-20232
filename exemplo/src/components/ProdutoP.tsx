@@ -1,6 +1,7 @@
 
 import {useLocation} from 'react-router-dom';
 import {useState, useEffect} from 'react'
+import {MdShoppingCart, MdSell} from 'react-icons/md'
 
 interface ProdutoProps { // tipo de dado
   id: number,
@@ -51,8 +52,30 @@ export function ProdutoP() {
                 <th className="border border-gray-300 px-4 py-2">Descrição</th>
                 <th className="border border-gray-300 px-4 py-2">Preço</th>
                 <th className="border border-gray-300 px-4 py-2">Quantidade</th>
+                <th className="border border-gray-300 px-4 py-2">Compra</th>
+                <th className="border border-gray-300 px-4 py-2">Venda</th>
               </tr>
             </thead>
+            <tbody>
+              {
+                products.map( (product) => (
+                  <tr key={product.id}>
+                    <td className="border border-gray-300 px-4 py-2">{product.id}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.name}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.description}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.price}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.qty}</td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <MdShoppingCart size={20}/>
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <MdSell size={20}/>
+                    </td>
+                  </tr>
+                ) /* fim da função dentro do map */
+                ) /* fim do map */
+              } {/* fim do reactjs */}
+            </tbody>
           </table>
         </div>
       </div>
