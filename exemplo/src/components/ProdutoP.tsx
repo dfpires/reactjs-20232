@@ -1,7 +1,7 @@
 
 import {useLocation} from 'react-router-dom';
 import {useState, useEffect} from 'react'
-import {MdShoppingCart, MdSell} from 'react-icons/md'
+import {MdShoppingCart, MdSell, MdOutlineDeleteOutline} from 'react-icons/md'
 
 interface ProdutoProps { // tipo de dado
   id: number,
@@ -19,7 +19,6 @@ export function ProdutoP() {
   // vetor de produtos
   const [products, setProducts] = useState<ProdutoProps[]>([])
   // variáveis de estado para os campos do formulário
-  const [id, setId] = useState('')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
@@ -46,6 +45,11 @@ export function ProdutoP() {
       buscaProdutos()
   } , [username])
 
+  // quando o vetor de produtos for alterado, executa a função useEffect
+  useEffect( () => {
+    setProducts(products) // atualiza a lista de produtos
+  }, [products] ) 
+  
   // função para cadastrar um produto
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault() // evita que a página seja recarregada
@@ -58,8 +62,20 @@ export function ProdutoP() {
     }
     try {
       // chamar a API para cadastrar o produto
-      
-    }
+      const produtoCadastrado = await fetch(`http://localhost:3000/products`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(produto)
+      })
+      .then ( resp => { // quando o servidor respondeu
+        return resp.json() // transforma em json
+      })
+       // atualiza a lista de produtos
+       // monta uma nova lista com a lista anterior + produto cadastrado
+      setProducts([...products, produtoCadastrado])
+      }
     catch(error) {
       console.log(error)
     }
@@ -117,6 +133,7 @@ export function ProdutoP() {
                 <th className="border border-gray-300 px-4 py-2">Descrição</th>
                 <th className="border border-gray-300 px-4 py-2">Preço</th>
                 <th className="border border-gray-300 px-4 py-2">Quantidade</th>
+                <th className="border border-gray-300 px-4 py-2">Remove</th>
                 <th className="border border-gray-300 px-4 py-2">Compra</th>
                 <th className="border border-gray-300 px-4 py-2">Venda</th>
               </tr>
@@ -131,10 +148,19 @@ export function ProdutoP() {
                     <td className="border border-gray-300 px-4 py-2">{product.price}</td>
                     <td className="border border-gray-300 px-4 py-2">{product.qty}</td>
                     <td className="border border-gray-300 px-4 py-2">
-                      <MdShoppingCart size={20}/>
+                      <button onClick={() => handleRemove(product.id)}> 
+                        <MdOutlineDeleteOutline size={20}/>
+                      </button>
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      <MdSell size={20}/>
+                      <button onClick={() => handleBuy(product.id)}> 
+                        <MdShoppingCart size={20}/>
+                      </button>
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <button onClick={() => handleSell(product.id)}> 
+                        <MdSell size={20}/>
+                      </button>
                     </td>
                   </tr>
                 ) /* fim da função dentro do map */
