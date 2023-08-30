@@ -18,6 +18,12 @@ export function ProdutoP() {
   const username = location.state?.username || '';
   // vetor de produtos
   const [products, setProducts] = useState<ProdutoProps[]>([])
+  // variáveis de estado para os campos do formulário
+  const [id, setId] = useState('')
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [price, setPrice] = useState('')
+  const [qty, setQty] = useState('')
 
   // fazer o hook useEffect para carregar os produtos da API
   // quando a página for carregada ou o username for alterado
@@ -40,9 +46,68 @@ export function ProdutoP() {
       buscaProdutos()
   } , [username])
 
+  // função para cadastrar um produto
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault() // evita que a página seja recarregada
+    // monta o objeto produto
+    const produto = {
+      name,
+      description,
+      price,
+      qty
+    }
+    try {
+      // chamar a API para cadastrar o produto
+      
+    }
+    catch(error) {
+      console.log(error)
+    }
+
+  }
     return (
       <div className="flex flex-col items-center justify-center h-screen w-screen">
         <div className="max-w-md mx-auto mb-4">
+          {/* formulário para cadastro de um produto */}
+          <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-4">
+            <div>
+              <label htmlFor="name" className="text-sm block font-bold mb-2">
+                Nome
+              </label>
+              <input type="text" id="name" value={name} 
+                     onChange={ (e) => setName(e.target.value) } 
+                     className="w-full border border-gray-300 rounded-md shadow-sm mb-2" />
+            </div>
+            <div>
+              <label htmlFor="description" className="text-sm block font-bold mb-2">
+                Descrição
+              </label>
+              <textarea id="description" value={description}
+                        onChange={ (e) => setDescription(e.target.value) }
+                        className="w-full border border-gray-300 rounded-md shadow-sm mb-2" />
+            </div>
+            <div>
+              <label htmlFor="price" className="text-sm block font-bold mb-2">
+                Preço
+              </label>
+              <input type="number" id="price" value={price}
+                      onChange={ (e) => setPrice(e.target.value) }
+                      className="w-full border border-gray-300 rounded-md shadow-sm mb-2" />
+            </div>
+            <div>
+              <label htmlFor="qty" className="text-sm block font-bold mb-2">
+                Quantidade 
+              </label>
+              <input type="number" id="qty" value={qty}
+                      onChange={ (e) => setQty(e.target.value) }
+                      className="w-full border border-gray-300 rounded-md shadow-sm mb-2" />
+            </div>
+            <button type="submit" 
+              className="w-full bg-blue-500 text-white font-bold rounded">
+              Cadastrar produto
+            </button>
+          </form>
+          {/* lista de produtos dentro de uma tabela */}
           <h2 className="font-bold mb-4"> Lista de Produtos </h2>
           <table className="w-full border border-gray-300">
             <thead>
