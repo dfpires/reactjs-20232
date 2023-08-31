@@ -18,32 +18,41 @@
   ],
   "products": [
     {
+      "name": "xxx",
+      "description": "xxx",
+      "price": "1",
+      "qty": "1",
+      "id": 1
+    },
+    {
+      "name": "yyy",
+      "description": "yyy",
+      "price": "2",
+      "qty": "2",
+      "id": 2
+    }
+  ],
+  "orders": [
+    {
       "id": 1,
-      "name": "Product 1",
-      "description": "Product 1 Detail ",
-      "price": 100,
-      "qty": 10
+      "product_id": 1,
+      "qty": 10,
+      "price": 1,
+      "type": "buy"
     },
     {
       "id": 2,
-      "name": "Product 2",
-      "description": "Product 2 Detail ",
-      "price": 200,
-      "qty": 20
+      "product_id": 2,
+      "qty": 1,
+      "price": 2,
+      "type": "sell"
     },
     {
-      "id": 3,
-      "name": "Product 3",
-      "description": "Product 3 Detail ",
-      "price": 300,
-      "qty": 30
-    },
-    {
-      "name": "biscoito",
-      "description": "recheado de chocolate",
-      "price": "10",
-      "qty": "100",
-      "id": 4
+      "product_id": 2,
+      "qty": 10,
+      "price": 2,
+      "type": "buy",
+      "id": 3
     }
   ]
 }

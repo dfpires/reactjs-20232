@@ -11,6 +11,14 @@ interface ProdutoProps { // tipo de dado
   qty: number
 }
 
+interface OrderProps { // tipo de dado
+  id: number,
+  product_id: number,
+  price: number,
+  qty: number,
+  type: string
+}
+
 export function ProdutoP() {
   // esta variável vai conter o username passado na navegação
   const location = useLocation();
@@ -18,6 +26,9 @@ export function ProdutoP() {
   const username = location.state?.username || '';
   // vetor de produtos
   const [products, setProducts] = useState<ProdutoProps[]>([])
+  // vetor de orders
+  const [orders, setOrders] = useState<OrderProps[]>([])
+
   // variáveis de estado para os campos do formulário
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -79,8 +90,61 @@ export function ProdutoP() {
     catch(error) {
       console.log(error)
     }
-
   }
+  // função para remover um produto
+  const handleRemove = async (id: number) => {
+      let confirma = confirm('Confirma a remoção do produto?')
+      if (confirma) {
+        // requisição DELETE para remover um produto através da API
+        await fetch(`http://localhost:3000/products/${id}`, {
+          method: 'DELETE'
+        })
+        .then( response => {
+          return response.json()
+        })
+        .catch(error => {
+            alert(error)
+        })
+        // atualiza a lista de produtos - removendo o produto deletado
+        // setProducts vai receber como parâmetro a lista de produtos atual
+        // retirando o produto que foi removido
+        setProducts(products.filter( (product) => product.id !== id ))
+      }
+    }
+    const handleBuy = async (id: number) => {
+        const quantity = Number(prompt('Quantidade de produtos a comprar'))
+        const price = Number(prompt('Preço do produto a comprar'))
+        // cria objeto para inserção
+        const obj = {
+          product_id: id,
+          qty: quantity,
+          price: price,
+          type: 'buy'
+        }
+        // chamamos a API para inserir a compra no banco de dados
+        const newOrder = await fetch(`http://localhost:3000/orders`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },  
+          body: JSON.stringify(obj)
+        })
+        .then( response => {
+            return response.json()
+        })  
+        .catch(error => {
+            alert(error)
+        })
+        
+          // atualiza a lista de orders
+       // monta uma nova lista com a lista anterior + ordem cadastrado
+      setOrders([...orders, newOrder])
+
+      }
+
+    const handleSell = async (id: number) => {
+      
+    }
     return (
       <div className="flex flex-col items-center justify-center h-screen w-screen">
         <div className="max-w-md mx-auto mb-4">
