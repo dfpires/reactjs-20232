@@ -18,9 +18,9 @@
   ],
   "products": [
     {
-      "name": "xxx",
-      "description": "xxx",
-      "price": "1",
+      "name": "xxx2",
+      "description": "xxx2",
+      "price": 12,
       "qty": "1",
       "id": 1
     },
@@ -28,8 +28,22 @@
       "name": "yyy",
       "description": "yyy",
       "price": "2",
-      "qty": "2",
+      "qty": 22,
       "id": 2
+    },
+    {
+      "name": "zzz",
+      "description": "zzz",
+      "price": "10",
+      "qty": "100",
+      "id": 3
+    },
+    {
+      "id": 4,
+      "name": "www2",
+      "description": "wwww2",
+      "price": "220",
+      "qty": "22"
     }
   ],
   "orders": [
@@ -53,6 +67,20 @@
       "price": 2,
       "type": "buy",
       "id": 3
+    },
+    {
+      "product_id": 2,
+      "qty": 2,
+      "price": 2,
+      "type": "buy",
+      "id": 4
+    },
+    {
+      "product_id": 3,
+      "qty": 50,
+      "price": 10,
+      "type": "sell",
+      "id": 5
     }
   ]
 }
