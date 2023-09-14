@@ -1,10 +1,14 @@
 import { MdOutlinePermContactCalendar, MdSell, MdShoppingCart } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-export default function Menu(){
+interface MenuProps {
+    username: string
+}
+export default function Menu( {username}: MenuProps){
     return (
         <div className="flex flex-col w-64 h-screen overflow-y-auto px-4 py-8 border-r">
             <h2 className="text-blue-800 font-semibold text-center text-3xl"> Sistema da Creche </h2>
+            <h3 className="text-blue-800 font-semibold text-center text-3xl"> {username} </h3>
             <div className="flex flex-col justify-between mt-6">
                 <aside> 
                     <ul>

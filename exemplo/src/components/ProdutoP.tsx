@@ -2,6 +2,7 @@
 import {useLocation} from 'react-router-dom';
 import {useState, useEffect} from 'react'
 import {MdMode, MdShoppingCart, MdSell, MdOutlineDeleteOutline} from 'react-icons/md'
+import Menu from './Menu';
 
 interface ProdutoProps { // tipo de dado
   id: number,
@@ -24,6 +25,8 @@ export function ProdutoP() {
   const location = useLocation();
   // recupera o username
   const username = location.state?.username || '';
+
+  
   // vetor de produtos
   const [products, setProducts] = useState<ProdutoProps[]>([])
   // vetor de orders
@@ -224,6 +227,10 @@ export function ProdutoP() {
 
     
     return (
+      <>
+      <div className="flex-col">
+          <Menu username={username}/>
+      </div>
       <div className="flex flex-col items-center justify-center ">
         <div className="max-w-md mx-10 my-5 mb-4">
           {/* formulário para cadastro de um produto */}
@@ -318,5 +325,6 @@ export function ProdutoP() {
           </table>
         </div>
       </div>
+      </>
     )
 }
