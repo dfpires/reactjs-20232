@@ -224,8 +224,8 @@ export function ProdutoP() {
 
     
     return (
-      <div className="flex flex-col items-center justify-center h-screen w-screen">
-        <div className="max-w-md mx-auto mb-4">
+      <div className="flex flex-col items-center justify-center ">
+        <div className="max-w-md mx-10 my-5 mb-4">
           {/* formulário para cadastro de um produto */}
           <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-4">
             <div>
