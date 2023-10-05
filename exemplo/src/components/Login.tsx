@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useCookies } from 'react-cookie' // hook para manipular cookies
 
 export default function Login(){
     // vamos criar duas variáveis de estado para username e password   
@@ -7,6 +8,9 @@ export default function Login(){
     // useState é um hook do ReactJS, cria e inicia a variável de estado
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    // vamos criar um cookie para armazenar o username
+    const [cookie, setCookie] = useCookies(['username'])
+
     // hook do React Router DOM para navegar entre páginas
     const navigate = useNavigate()
 
@@ -34,6 +38,8 @@ export default function Login(){
             }
             else {
                 // senha correta
+                // vamos armazenar o username no cookie username
+                setCookie('username', username)
                 // vamos navegar para a página de produtos
                 navigate('/produto', {state: {username: username}})
             }
