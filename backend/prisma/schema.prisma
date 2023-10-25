@@ -9,3 +9,40 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id Int @id @default(autoincrement())
+  username String
+  password String
+  email String
+  created_at DateTime
+  products Product[]
+  controls Control[]
+  @@map("user")
+}
+
+model Product {
+   id Int @id @default(autoincrement())
+   name String
+   description String
+   quantity Float
+   price Float
+   created_at DateTime
+   userId Int
+   user User @relation(fields: [userId], references: [id])
+   controls Control[]
+   @@map("product")
+}
+
+model Control {
+  id Int @id @default(autoincrement())
+  type String
+  quantity Float
+  price Float
+  created_at DateTime
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  productId Int
+  product Product @relation(fields: [productId], references: [id])
+  @@map("control")
+}
