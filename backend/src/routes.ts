@@ -135,10 +135,87 @@ export async function AppRoutes(app: FastifyInstance) {
 
 
     //Passo 5. Lista os controls
-app.get('/controls', async () => {
-    const controls = await prisma.control.findMany()
+    app.get('/controls', async () => {
+        const controls = await prisma.control.findMany()
+        return controls
+    })
+
+
+       // Passo 6. Lista os controls de um usuário
+    app.get('/controls/:userId', async (request) => {
+    const userIdParams = z.object({
+        userId: z.string()
+    })
+    const {userId} = userIdParams.parse(request.params)
+    const controls = await prisma.control.findMany({
+        where: {
+            userId: Number(userId)
+        }
+    })
     return controls
 })
+
+// Passo 7. Realiza uma venda de um usuário
+// rota pra atualizar a quantidade em estoque - venda
+app.patch('/product/venda', async (request) => {
+    const vendaBody = z.object({
+        id: z.number(),
+        x: z.number(),
+        userId: z.number(),
+        price: z.number()
+    })
+    const {id, x, userId, price} = vendaBody.parse(request.body)
+
+    let resp = await prisma.product.updateMany({
+        where: {
+            id: id,
+            quantity: {
+                gte: x
+            }
+        },
+        data: {
+            quantity: {
+                decrement: x
+            }
+        }
+    })
+
+//  return resp.count
+    if ((resp.count) > 0){
+        const today = dayjs().startOf('day').toDate() // sem hora, minuto e segundo
+        await prisma.control.create({
+            data: {
+                type: "V", 
+                quantity: x,
+                price: price,
+                created_at: today,
+                userId,
+                productId: id
+            }
+        })
+        return 1 // indica que a venda foi realizada
+    }
+    else {
+        return 0 // indica que a venda não foi realizada
+    }
+})
+
+// rota para remover um produto, usando o verbo delete
+app.delete('/product/:id', async (request) => {
+    // recupera o id para remoção
+    const idParam = z.object({
+        id: z.string()
+    })
+    const {id} = idParam.parse(request.params)
+    // remove o produto
+    let productDeleted = await prisma.product.delete({
+        where: {
+            id: Number(id)
+        }
+    })
+    return productDeleted
+})
+
 
 
 }
