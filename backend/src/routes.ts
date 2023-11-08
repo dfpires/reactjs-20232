@@ -44,6 +44,7 @@ export async function AppRoutes(app: FastifyInstance) {
         return user
     })
 
+    
     // define uma rota que consulta todos os usuários cadastrados no banco de dados
     app.get('/users', async () => {
         const users = await prisma.user.findMany()
