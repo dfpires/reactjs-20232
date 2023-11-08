@@ -18,31 +18,34 @@ export default function Login(){
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         // previne o comportamento padrão do formulário
         e.preventDefault()
+        let usuario = {
+            username,
+            password
+        }
         // vamos verificar se usuário e senha estão corretos
         // vamos conectar assincronamente no backend no endpoint /users?username=xxx
-        const resp = await fetch(`http://localhost:3000/users?username=${username}`, {
-            method: 'GET'
+        const resp = await fetch(`http://localhost:3333/user/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+              },
+              // quando enviamos os dados para servidor, convertemos objeto JS para string
+              body: JSON.stringify(usuario) 
             })
             .then (resposta => {
-                return resposta.json()
+                // quando recebemos os dados do servidor, convertemos string para objeto JS 
+                return resposta.json() 
             })
         console.log(resp)
         if (resp.length === 0) {
             alert('Usuário / senha incorretos ')
         }
         else {
-            // usuário encontrado
-            // vamos verificar se a senha está correta
-            if (resp[0].password !== password) {
-                alert('Usuário / senha incorretos')
-            }
-            else {
-                // senha correta
-                // vamos armazenar o username no cookie username
-                setCookie('username', username)
-                // vamos navegar para a página de produtos
-                navigate('/produto', {state: {username: username}})
-            }
+            // senha correta
+            // vamos armazenar o username no cookie username
+            setCookie('username', username)
+            // vamos navegar para a página de produtos
+            navigate('/produto', {state: {username: username, userId: resp[0].id}})
         }
     }
     return (

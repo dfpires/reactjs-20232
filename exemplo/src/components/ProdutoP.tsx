@@ -3,13 +3,15 @@ import {useLocation} from 'react-router-dom';
 import {useState, useEffect} from 'react'
 import {MdMode, MdShoppingCart, MdSell, MdOutlineDeleteOutline} from 'react-icons/md'
 import Menu from './Menu';
+import { useCookies } from 'react-cookie';
+import Login from './Login';
 
 interface ProdutoProps { // tipo de dado
   id: number,
   name: string,
   description: string,
   price: number,
-  qty: number
+  quantity: number
 }
 
 interface OrderProps { // tipo de dado
@@ -25,7 +27,8 @@ export function ProdutoP() {
   const location = useLocation();
   // recupera o username
   const username = location.state?.username || '';
-
+  // recupera o userId
+  const userId = location.state?.userId || ''
   
   // vetor de produtos
   const [products, setProducts] = useState<ProdutoProps[]>([])
@@ -36,7 +39,7 @@ export function ProdutoP() {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState(0)
-  const [qty, setQty] = useState(0)
+  const [quantity, setQuantity] = useState(0)
   // diferencia se vai inserir (id = 0) ou editar (id não for 0) um produto
   const [id, setId] = useState(0)
 
@@ -45,7 +48,7 @@ export function ProdutoP() {
   useEffect( () => {
     const buscaProdutos = async () => {
       try {
-        const resp = await fetch(`http://localhost:3000/products`)
+        const resp = await fetch(`http://localhost:3333/products`)
         const produtos = await resp.json()
         if (resp.ok){
           setProducts(produtos) // atualiza vetor de produtos com dados da API
@@ -77,7 +80,8 @@ export function ProdutoP() {
         name,
         description,
         price,
-        qty
+        quantity,
+        userId: userId
       }
     } 
     else {
@@ -85,24 +89,22 @@ export function ProdutoP() {
         name,
         description,
         price,
-        qty
+        quantity
       }
     }
     let url
     let verb
     if (id == 0) { // insere
-      url = `http://localhost:3000/products`
+      url = `http://localhost:3333/product`
       verb = 'POST'
     }
     else {
-      url = `http://localhost:3000/products/${id}`
+      url = `http://localhost:3333/product/${id}`
       verb = 'PUT'
     }
 
     try {
       // chamar a API para cadastrar o produto]
-      console.log(url)
-      console.log(verb)
       const produtoCadastrado = await fetch(url, {
         method: verb,
         headers: {
@@ -117,6 +119,7 @@ export function ProdutoP() {
        // monta uma nova lista com a lista anterior + produto cadastrado
        if (id == 0) { // insere
           setProducts([...products, produtoCadastrado])
+          alert('Produto cadastrado com sucesso')
        }
        else { // atualiza na lista o produto alterado
           setProducts(products.map( (product) => {
@@ -158,7 +161,7 @@ export function ProdutoP() {
       setName(product.name)
       setDescription(product.description)
       setPrice(product.price)
-      setQty(product.qty)
+      setQuantity(product.quantity)
       console.log(product.id)
       setId(product.id) // vai nos ajudar na criação/edição do produto
     }
@@ -225,11 +228,15 @@ export function ProdutoP() {
 
       }
 
-    
+      const [cookie] = useCookies(['username'])
+      if (cookie.username === undefined) {
+        return <Login />
+      }
+      else {
     return (
       <>
       <div className="flex-col">
-          <Menu username={username}/>
+          <Menu/>
       </div>
       <div className="flex flex-col items-center justify-center ">
         <div className="max-w-md mx-10 my-5 mb-4">
@@ -263,8 +270,8 @@ export function ProdutoP() {
               <label htmlFor="qty" className="text-sm block font-bold mb-2">
                 Quantidade 
               </label>
-              <input type="number" id="qty" value={qty}
-                      onChange={ (e) => setQty(Number(e.target.value))}
+              <input type="number" id="qty" value={quantity}
+                      onChange={ (e) => setQuantity(Number(e.target.value))}
                       className="w-full border border-gray-300 rounded-md shadow-sm mb-2" />
             </div>
             <button type="submit" 
@@ -296,7 +303,7 @@ export function ProdutoP() {
                     <td className="border border-gray-300 px-4 py-2">{product.name}</td>
                     <td className="border border-gray-300 px-4 py-2">{product.description}</td>
                     <td className="border border-gray-300 px-4 py-2">{product.price}</td>
-                    <td className="border border-gray-300 px-4 py-2">{product.qty}</td>
+                    <td className="border border-gray-300 px-4 py-2">{product.quantity}</td>
                     <td className="border border-gray-300 px-4 py-2">
                       <button onClick={() => handleEdit(product)}> 
                         <MdMode size={20}/>
@@ -327,4 +334,5 @@ export function ProdutoP() {
       </div>
       </>
     )
+            }
 }

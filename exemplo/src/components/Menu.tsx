@@ -4,10 +4,15 @@ import { useCookies } from 'react-cookie' // hook para manipular cookies
 
 export default function Menu(){
     // recupera conteúdo do cookie username
-    const [cookie] = useCookies(['username'])
+    const [cookie, setCookie, removeCookie] = useCookies(['username'])
     // se o cookie não existir, o valor padrão é 'visitante'
     const username = cookie.username || 'visitante'
 
+    function eliminaCookie() {
+        // remove o cookie username
+        removeCookie('username')
+    }
+    
     return (
         <div className="flex flex-col w-64 h-screen overflow-y-auto px-4 py-8 border-r">
             <h2 className="text-blue-800 font-semibold text-center text-3xl"> Sistema da Creche </h2>
@@ -36,10 +41,12 @@ export default function Menu(){
                             </Link>
                         </li>
                         <li className="mb-4">
-                            <button className="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-md"> 
-                                <MdLogout size={20}/>
-                                Sair 
-                            </button>
+                            <Link to="/" className="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-md"> 
+                                <button type="button" onClick={() => eliminaCookie()}>
+                                    <MdLogout size={20}/>
+                                    Sair 
+                                </button>
+                            </Link>
                         </li>
                     </ul>
                 </aside>
