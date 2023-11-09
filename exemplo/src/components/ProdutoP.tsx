@@ -46,23 +46,25 @@ export function ProdutoP() {
   // fazer o hook useEffect para carregar os produtos da API
   // quando a página for carregada ou o username for alterado
   useEffect( () => {
-    const buscaProdutos = async () => {
-      try {
-        const resp = await fetch(`http://localhost:3333/products`)
-        const produtos = await resp.json()
-        if (resp.ok){
-          setProducts(produtos) // atualiza vetor de produtos com dados da API
-        }
-        else {
-          console.log('Falha na busca por dados')
-        }
+       buscaProdutos()
+  } , [username])
+
+  // retiramos a definição do buscaProdutos do useEffect
+  const buscaProdutos = async () => {
+    try {
+      const resp = await fetch(`http://localhost:3333/products`)
+      const produtos = await resp.json()
+      if (resp.ok){
+        setProducts(produtos) // atualiza vetor de produtos com dados da API
       }
-      catch(error) {
-        console.log(error)
+      else {
+        console.log('Falha na busca por dados')
       }
     }
-      buscaProdutos()
-  } , [username])
+    catch(error) {
+      console.log(error)
+    }
+  }
 
   // quando o vetor de produtos for alterado, executa a função useEffect
   useEffect( () => {
@@ -141,7 +143,7 @@ export function ProdutoP() {
       let confirma = confirm('Confirma a remoção do produto?')
       if (confirma) {
         // requisição DELETE para remover um produto através da API
-        await fetch(`http://localhost:3000/products/${id}`, {
+        await fetch(`http://localhost:3333/product/${id}`, {
           method: 'DELETE'
         })
         .then( response => {
@@ -171,14 +173,14 @@ export function ProdutoP() {
         const price = Number(prompt('Preço do produto a comprar'))
         // cria objeto para inserção
         const obj = {
-          product_id: id,
-          qty: quantity,
+          id: id,
+          quantity: quantity,
           price: price,
-          type: 'buy'
+          userId: userId
         }
         // chamamos a API para inserir a compra no banco de dados
-        const newOrder = await fetch(`http://localhost:3000/orders`, {
-          method: 'POST',
+        await fetch(`http://localhost:3333/product/compra`, {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json'
           },  
@@ -189,12 +191,13 @@ export function ProdutoP() {
         })  
         .catch(error => {
             alert(error)
+            return 
         })
         
           // atualiza a lista de orders
        // monta uma nova lista com a lista anterior + ordem cadastrado
-      setOrders([...orders, newOrder])
-
+      alert('Compra realizada com sucesso')
+      buscaProdutos()
       }
 
       const handleSell = async (id: number) => {
@@ -202,14 +205,14 @@ export function ProdutoP() {
         const price = Number(prompt('Preço do produto a vender'))
         // cria objeto para inserção
         const obj = {
-          product_id: id,
-          qty: quantity,
+          id: id,
+          quantity: quantity,
           price: price,
-          type: 'sell'
+          userId: userId
         }
         // chamamos a API para inserir a compra no banco de dados
-        const newOrder = await fetch(`http://localhost:3000/orders`, {
-          method: 'POST',
+        let resposta = await fetch(`http://localhost:3333/product/venda`, {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json'
           },  
@@ -224,9 +227,16 @@ export function ProdutoP() {
         
           // atualiza a lista de orders
        // monta uma nova lista com a lista anterior + ordem cadastrado
-      setOrders([...orders, newOrder])
-
+      //setOrders([...orders, newOrder])
+      console.log(resposta)
+      if (resposta == 1){
+        alert('Venda realizada com sucesso')
+        buscaProdutos()
       }
+      else {
+        alert('Sem estoque')
+      }
+    }
 
       const [cookie] = useCookies(['username'])
       if (cookie.username === undefined) {
