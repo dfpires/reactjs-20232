@@ -161,22 +161,22 @@ export async function AppRoutes(app: FastifyInstance) {
 app.patch('/product/venda', async (request) => {
     const vendaBody = z.object({
         id: z.number(),
-        x: z.number(),
         userId: z.number(),
+        quantity: z.number(),
         price: z.number()
     })
-    const {id, x, userId, price} = vendaBody.parse(request.body)
+    const {id, userId, quantity, price} = vendaBody.parse(request.body)
 
     let resp = await prisma.product.updateMany({
         where: {
             id: id,
             quantity: {
-                gte: x
+                gte: quantity
             }
         },
         data: {
             quantity: {
-                decrement: x
+                decrement: quantity
             }
         }
     })
@@ -187,7 +187,7 @@ app.patch('/product/venda', async (request) => {
         await prisma.control.create({
             data: {
                 type: "V", 
-                quantity: x,
+                quantity: quantity,
                 price: price,
                 created_at: today,
                 userId,
